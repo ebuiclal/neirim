@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seni Seviyorum 💐</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Dancing Script', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Pixel yağmuru - kasımpatı yapımı */
+        #pixelCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Pixel yazı - NEİRİMMMM */
+        .pixel-title {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 40px;
+            color: #ffd700;
+            text-shadow: 
+                2px 2px 0 #ff6b9d,
+                4px 4px 0 #ff0000,
+                6px 6px 0 #8b0000;
+            letter-spacing: 8px;
+            z-index: 10;
+            text-align: center;
+            animation: pixelGlow 2s ease-in-out infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes pixelGlow {
+            0%, 100% { 
+                text-shadow: 
+                    2px 2px 0 #ff6b9d,
+                    4px 4px 0 #ff0000,
+                    6px 6px 0 #8b0000;
+            }
+            50% { 
+                text-shadow: 
+                    2px 2px 0 #ffd700,
+                    4px 4px 0 #ff6b9d,
+                    6px 6px 0 #ff0000;
+            }
+        }
+
+        /* El yazısı - Seni seviyorum */
+        .love-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Great Vibes', cursive;
+            font-size: 80px;
+            color: #fff;
+            text-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.5),
+                0 0 40px rgba(255, 107, 157, 0.3),
+                0 0 60px rgba(255, 215, 0, 0.2);
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.5s ease;
+            animation: fadeIn 3s ease;
+            letter-spacing: 2px;
+        }
+
+        .love-text:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            text-shadow: 
+                0 0 30px rgba(255, 255, 255, 0.8),
+                0 0 60px rgba(255, 107, 157, 0.5),
+                0 0 100px rgba(255, 215, 0, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Mektup Modal */
+        .letter-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .letter-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .letter-content {
+            background: linear-gradient(145deg, #1a1a2e, #2d2d3d, #1a1a2e);
+            border: 2px solid #ffd700;
+            border-radius: 20px;
+            padding: 60px;
+            max-width: 700px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            animation: letterIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 
+                0 0 40px rgba(255, 215, 0, 0.3),
+                0 0 80px rgba(255, 107, 157, 0.2),
+                inset 0 0 30px rgba(255, 255, 255, 0.05);
+        }
+
+        @keyframes letterIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5) rotate(-10deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0);
+            }
+        }
+
+        .letter-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffd700;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .letter-close:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.1);
+        }
+
+        .letter-header {
+            font-family: 'Dancing Script', cursive;
+            font-size: 36px;
+            color: #ffd700;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .letter-text {
+            font-family: 'Caveat', cursive;
+            font-size: 32px;
+            color: #fff;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .letter-signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 40px;
+            color: #ff6b9d;
+            margin-top: 20px;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
+            animation: signatureGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes signatureGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(255, 107, 157, 0.5); }
+            50% { text-shadow: 0 0 40px rgba(255, 107, 157, 0.8); }
+        }
+
+        /* Kasımpatı çiçeği pixel hali */
+        .flower-pixel {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            border-radius: 2px;
+            animation: flowerFall linear infinite;
+        }
+
+        @keyframes flowerFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+
+        /* Kasımpatı buketi canvas üzerinde çizilecek */
+        .flower-pixel.yellow { background: #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+        .flower-pixel.white { background: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
+        .flower-pixel.pink { background: #ff6b9d; box-shadow: 0 0 15px rgba(255, 107, 157, 0.8); }
+        .flower-pixel.orange { background: #ff8c00; box-shadow: 0 0 15px rgba(255, 140, 0, 0.8); }
+
+        /* Müzik notu */
+        .music-note {
+            position: absolute;
+            color: #ffd700;
+            font-size: 20px;
+            animation: noteFloat 5s ease-in-out infinite;
+            z-index: 5;
+            opacity: 0.6;
+        }
+
+        @keyframes noteFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            50% { transform: translateY(-50px) rotate(15deg); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Pixel Canvas -->
+    <canvas id="pixelCanvas"></canvas>
+
+    <!-- Pixel Yazı - NEİRİMMMM -->
+    <div class="pixel-title">NEİRİMMMM ❤️</div>
+
+    <!-- El Yazısı - Seni Seviyorum -->
+    <div class="love-text" onclick="openLetter()">Seni seviyorum</div>
+
+    <!-- Müzik Notaları -->
+    <div class="music-note" style="top: 20%; left: 10%;">🎵</div>
+    <div class="music-note" style="top: 70%; left: 20%; animation-delay: 2s;">🎶</div>
+    <div class="music-note" style="top: 15%; right: 15%; animation-delay: 4s;">🎵</div>
+    <div class="music-note" style="top: 80%; right: 10%; animation-delay: 3s;">🎶</div>
+
+    <!-- Mektup Modal -->
+    <div class="letter-modal" id="letterModal">
+        <div class="letter-content">
+            <div class="letter-close" onclick="closeLetter()">✕</div>
+            <div class="letter-header">Sevgili Eşim,</div>
+            <div class="letter-text">
+                Bugüne kadar iyi ve kötü günlerimde<br>
+                benimle olduğun için sana çok teşekkür ederim.<br>
+                Rabbim bizi hiç ayırmasın.<br>
+                Sevgilimmmm ❤️
+            </div>
+            <div class="letter-signature">Sonsuza dek seninim 💍</div>
+        </div>
+    </div>
+
+    <script>
+        // Canvas ayarları
+        const canvas = document.getElementById('pixelCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Kasımpatı pixel konfigürasyonu
+        const flowers = [
+            { x: 0.2, y: 0.6, color: '#ffd700', size: 30 },
+            { x: 0.5, y: 0.55, color: '#ff6b9d', size: 35 },
+            { x: 0.8, y: 0.6, color: '#fff', size: 28 },
+            { x: 0.3, y: 0.7, color: '#ff8c00', size: 32 },
+            { x: 0.65, y: 0.7, color: '#ffd700', size: 30 }
+        ];
+
+        // Pixel düşürme fonksiyonu
+        function drawPixelFlower(flowerX, flowerY, color) {
+            const canvasWidth = canvas.width;
+            const canvasHeight = canvas.height;
+            const x = flowerX * canvasWidth;
+            const y = flowerY * canvasHeight;
+
+            // Kasımpatı çiçeği deseni (pixel art)
+            const pixels = [
+                // Merkez
+                [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1],
+                // Yapraklar
+                [2, 0], [-2, 0], [0, 2], [0, -2],
+                [1, 1], [-1, 1], [1, -1], [-1, -1],
+                [2, 1], [-2, 1], [2, -1], [-2, -1],
+                [1, 2], [-1, 2], [1, -2], [-1, -2],
+                [3, 0], [-3, 0], [0, 3], [0, -3],
+                // Dış yapraklar
+                [2, 2], [-2, 2], [2, -2], [-2, -2],
+                [3, 1], [-3, 1], [3, -1], [-3, -1],
+                [1, 3], [-1, 3], [1, -3], [-1, -3]
+            ];
+
+            // Pixel'leri çiz
+            pixels.forEach(pixel => {
+                ctx.fillStyle = color;
+                ctx.fillRect(x + pixel[0] * 10, y + pixel[1] * 10, 8, 8);
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = color;
+            });
+        }
+
+        // Kasımpatı buketi çiz
+        function drawBouquet() {
+            // Çiçekleri çiz
+            flowers.forEach(flower => {
+                drawPixelFlower(flower.x, flower.y, flower.color);
+            });
+
+            // Sapları çiz
+            ctx.strokeStyle = '#228B22';
+            ctx.lineWidth = 3;
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = '#228B22';
+
+            flowers.forEach(flower => {
+                const x = flower.x * canvas.width;
+                const y = flower.y * canvas.height;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x, y + 100);
+                ctx.stroke();
+            });
+
+            // Yapraklar
+            ctx.fillStyle = '#2ecc71';
+            flowers.forEach(flower => {
+                const x = flower.x * canvas.width;
+                const y = flower.y * canvas.height;
+                // Yaprak desenleri
+                for (let i = 0; i < 8; i++) {
+                    ctx.fillRect(x - 10 + i * 3, y + 50 + Math.sin(i) * 20, 4, 4);
+                }
+            });
+        }
+
+        // Pixel yağmuru (animasyon)
+        let fallingPixels = [];
+
+        function createFallingPixel() {
+            const colors = ['#ffd700', '#ff6b9d', '#fff', '#ff8c00', '#ffd700'];
+            const x = Math.random() * canvas.width;
+            const y = -20;
+            const speed = 2 + Math.random() * 4;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            fallingPixels.push({ x, y, speed, color });
+        }
+
+        function animateFallingPixels() {
+            // Arka planı temizle
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Yeni pixel oluştur
+            if (Math.random() < 0.1) {
+                createFallingPixel();
+            }
+
+            // Pixel'leri hareket ettir
+            fallingPixels.forEach(pixel => {
+                pixel.y += pixel.speed;
+                ctx.fillStyle = pixel.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = pixel.color;
+                ctx.fillRect(pixel.x, pixel.y, 6, 6);
+            });
+
+            // Ekran dışına çıkanları temizle
+            fallingPixels = fallingPixels.filter(pixel => pixel.y < canvas.height);
+
+            // Buketi tekrar çiz
+            drawBouquet();
+
+            requestAnimationFrame(animateFallingPixels);
+        }
+
+        // Mektubu aç
+        function openLetter() {
+            const modal = document.getElementById('letterModal');
+            modal.classList.add('active');
+        }
+
+        // Mektubu kapat
+        function closeLetter() {
+            const modal = document.getElementById('letterModal');
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        // Mektup modalını aktif et
+        document.getElementById('letterModal').style.display = 'flex';
+        document.getElementById('letterModal').style.opacity = '0';
+        document.getElementById('letterModal').style.pointerEvents = 'none';
+
+        // Sayfa yüklendiğinde
+        window.onload = function() {
+            // Canvas'ı temizle
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Buketi çiz
+            drawBouquet();
+
+            // Pixel yağmuru başlat
+            animateFallingPixels();
+
+            // Mektubu hazırla
+            setTimeout(() => {
+                const modal = document.getElementById('letterModal');
+                modal.style.opacity = '1';
+                modal.style.pointerEvents = 'auto';
+            }, 1000);
+        };
+
+        // Pencere boyutlandığında
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            drawBouquet();
+        });
+    </script>
+</body>
+</html>
